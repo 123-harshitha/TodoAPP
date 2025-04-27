@@ -1,0 +1,129 @@
+{% extends 'todos/base.html' %} <!-- Inherits the base template features -->
+
+{% block title %}
+<title>Todo List</title>
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <style>
+    body {
+      background-color: #f0f8ff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+      margin-top: 50px;
+    }
+
+    .page-header {
+      margin-bottom: 30px;
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-control {
+      margin-bottom: 10px;
+    }
+
+    .list-group-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      background-color: #e6f7ff;
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .list-group-item:hover {
+      background-color: #d1ecf1;+
+
+
+      
+      transform: scale(1.02);
+    }
+
+    .todo-complete {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    i {
+      color: red;
+      cursor: pointer;
+    }
+
+    .btn-outline-primary:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .add-task-section {
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    hr {
+      border-color: #007bff;
+    }
+  </style>
+
+  <!-- Title Section -->
+  <div class="page-header">
+    <h1>Manage Your Tasks Efficiently</h1>
+  </div>
+
+  <!-- Add a Task Section -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-8">
+      <div class="add-task-section">
+        <form method="post" action="{% url 'todos:add' %}">
+          {% csrf_token %}
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="title" placeholder="Add new task..." required>
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-outline-primary">Add Task</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-4" />
+
+  <!-- Todo List Section -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-8">
+      <ul class="list-group">
+        {% for todo in todo_list %}    
+        <li class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %}">
+          <form style="display: inline;" method="post" action="{% url 'todos:update' todo.id %}">
+            {% csrf_token %}
+            <input type="checkbox" name="isCompleted" onchange="this.form.submit()" {% if todo.isCompleted %} checked {% endif %} class="todo-status-checkbox" title="Toggle Task">
+          </form>
+          {{ todo.title }}
+          <a href="{% url 'todos:delete' todo.id %}" class="text-danger" title="Delete">
+            <i class="far fa-trash-alt"></i>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
