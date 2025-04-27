@@ -58,6 +58,9 @@ Delete Task: Users can delete tasks that are no longer needed.
 
 
 Folder Structure
+
+
+
 todoApp/
 ├── todoApp/
 │   └── todos/
